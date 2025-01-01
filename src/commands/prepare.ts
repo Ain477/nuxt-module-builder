@@ -1,48 +1,49 @@
-import type { NuxtConfig } from '@nuxt/schema'
-import { defineCommand } from 'citty'
-import { resolve } from 'pathe'
+import type { NuxtConfig } from "@nuxt/schema";
+import { defineCommand } from "citty";
+import { resolve } from "pathe";
 
 export default defineCommand({
   meta: {
-    name: 'prepare',
-    description: 'Prepare @nuxt/module-builder environment by writing types and stubs',
+    name: "prepare",
+    description:
+      "Prepare @nuxt/module-builder environment by writing types and stubs",
   },
   args: {
     cwd: {
-      type: 'string',
-      description: 'Current working directory',
+      type: "string",
+      description: "Current working directory",
     },
     rootDir: {
-      type: 'positional',
-      description: 'Root directory',
+      type: "positional",
+      description: "Root directory",
       required: false,
     },
   },
   async run(context) {
-    const { runCommand } = await import('nuxi')
+    const { runCommand } = await import("nuxi");
 
-    const cwd = resolve(context.args.cwd || context.args.rootDir || '.')
+    const cwd = resolve(context.args.cwd || context.args.rootDir || ".");
 
-    return runCommand('prepare', [cwd], {
+    return runCommand("prepare", [cwd], {
       overrides: {
-        compatibilityDate: '2024-04-03',
+        compatibilityDate: "2024-04-03",
         typescript: {
-          builder: 'shared',
+          builder: "shared",
         },
         imports: {
           autoImport: false,
         },
         modules: [
-          resolve(cwd, './src/module'),
+          resolve(cwd, "./module"),
           function (_options, nuxt) {
-            nuxt.hooks.hook('app:templates', (app) => {
+            nuxt.hooks.hook("app:templates", (app) => {
               for (const template of app.templates) {
-                template.write = true
+                template.write = true;
               }
-            })
+            });
           },
         ],
       } satisfies NuxtConfig,
-    })
+    });
   },
-})
+});

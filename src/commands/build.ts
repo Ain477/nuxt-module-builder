@@ -56,9 +56,9 @@ export default defineCommand({
       stub: context.args.stub,
       outDir,
       entries: [
-        'src/module',
+        'module',
         {
-          input: 'src/runtime/',
+          input: 'runtime/',
           outDir: `${outDir}/runtime`,
           addRelativeDeclarationExtensions: true,
           ext: 'js',
